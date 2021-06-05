@@ -52,6 +52,9 @@ bundle:
 test:
 	${DOCKER_COMPOSE_RUN} -e "RAILS_ENV=test" app bundle exec rspec ${T}
 
+guard:
+	${DOCKER_COMPOSE_RUN} -e "RAILS_ENV=${RAILS_ENV}" app bundle exec guard ${CMD}
+
 psql:
 	${DOCKER_COMPOSE_RUN} app psql postgresql://postgres@db/interview_${RAILS_ENV}
 
