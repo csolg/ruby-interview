@@ -61,6 +61,10 @@ group :development, :test do
   gem 'rubocop-rspec', '~> 1.32'
   # Great Ruby dubugging companion: pretty print Ruby objects to visualize their structure.
   gem 'awesome_print', '~> 1.8'
+  # Guard::RSpec allows to automatically & intelligently launch specs when files are modified.
+  gem 'guard-rspec'
+  # Bundler guard allows to automatically & intelligently install/update bundle when needed
+  gem 'guard-bundler'
 end
 
 group :development do
@@ -68,6 +72,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  # This gem implements the rspec command for Spring.
+  gem 'spring-commands-rspec'
 end
 
 group :test do
