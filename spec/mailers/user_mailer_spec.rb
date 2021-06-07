@@ -12,6 +12,7 @@ RSpec.describe UserMailer do
 
     it { expect(mail.subject).to eq 'The confirmation email' }
     it { expect(mail.to).to eq [email_credential.email] }
+    it { expect(EmailCredential.find(email_credential.id).confirmation_sent_at).to_not be_nil }
 
     context 'when format is html' do
       let(:part) { get_message_part mail, /html/ }
