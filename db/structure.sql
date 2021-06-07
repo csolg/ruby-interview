@@ -62,7 +62,9 @@ CREATE TABLE public.email_credentials (
     deleted_at timestamp with time zone,
     user_id bigint NOT NULL,
     created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    updated_at timestamp with time zone NOT NULL,
+    confirmation_token character varying,
+    confirmation_sent_at timestamp with time zone
 );
 
 
@@ -179,6 +181,13 @@ CREATE UNIQUE INDEX email_credentials_email_index ON public.email_credentials US
 
 
 --
+-- Name: index_email_credentials_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_email_credentials_on_confirmation_token ON public.email_credentials USING btree (confirmation_token);
+
+
+--
 -- Name: index_email_credentials_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -202,6 +211,7 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20190426065925'),
 ('20190426065935'),
-('20190502072717');
+('20190502072717'),
+('20210605055256');
 
 
