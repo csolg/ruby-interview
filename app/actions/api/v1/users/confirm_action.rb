@@ -10,7 +10,7 @@ module Api::V1
       private
 
       def confirm(input)
-        Try(active_record_common_errors) do
+        Try([RuntimeError]) do
           ::Users::ConfirmService.new.call(input)
         end.to_result
       end

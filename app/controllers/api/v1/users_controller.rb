@@ -18,9 +18,17 @@ module Api::V1
       result = resolve_action.new(context: {current_user: nil}).call(params.to_unsafe_h)
 
       if result.success?
-        render json: { success: true }, status: 201
+        render json: { success: true }, status: 202
       else
-        handle_failure(result)
+        head 409
+      end
+    end
+
+    def resend
+      if current_user&.email_credential&.state == 'pending'
+        render json: { success: true }, status: 202
+      else
+        head 409
       end
     end
   end

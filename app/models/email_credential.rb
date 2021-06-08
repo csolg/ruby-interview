@@ -9,6 +9,14 @@ class EmailCredential < ApplicationRecord
 
   after_create :send_confirmation_email
 
+  def confirm!
+    update confirmed_at: Time.now, state: 'active'
+  end
+
+  def confirmation_expired?
+    confirmation_sent_at + 2.days > Time.now
+  end
+
   private
 
   def send_confirmation_email
