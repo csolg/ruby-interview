@@ -11,6 +11,8 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (5.2.0)
+      concurrent-ruby (~> 1.0)
     actioncable (5.2.4.4)
       actionpack (= 5.2.4.4)
       nio4r (~> 2.0)
@@ -329,6 +331,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aasm
   activerecord-native_db_types_override (~> 0.3.0)
   awesome_print (~> 1.8)
   bcrypt (~> 3.1.7)

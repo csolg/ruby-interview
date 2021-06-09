@@ -39,6 +39,8 @@ gem 'jsonapi-parser', '~> 0.1.1'
 gem 'activerecord-native_db_types_override', '~> 0.3.0'
 # Simple, efficient background processing for Ruby.
 gem 'sidekiq', '~> 5.2', '>= 5.2.7'
+# This package contains AASM, a library for adding finite state machines to Ruby classes.
+gem 'aasm'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -95,3 +97,4 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
