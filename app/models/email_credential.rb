@@ -17,6 +17,11 @@ class EmailCredential < ApplicationRecord
     confirmation_sent_at + 2.days > Time.now
   end
 
+  def resend_confirmation_email
+    regenerate_confirmation_token
+    UserMailer.send_confirmation_email(user).deliver_now
+  end
+
   private
 
   def send_confirmation_email
