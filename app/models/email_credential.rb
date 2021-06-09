@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class EmailCredential < ApplicationRecord
+  include AASM
+
   has_secure_password
 
   belongs_to :user
@@ -8,10 +10,6 @@ class EmailCredential < ApplicationRecord
   has_secure_token :confirmation_token
 
   after_create :send_confirmation_email
-
-  def confirm!
-    update confirmed_at: Time.now, state: 'active'
-  end
 
   def confirmation_expired?
     confirmation_sent_at + 2.days > Time.now
@@ -22,9 +20,20 @@ class EmailCredential < ApplicationRecord
     UserMailer.send_confirmation_email(user).deliver_now
   end
 
-  private
-
   def send_confirmation_email
     UserMailer.send_confirmation_email(user).deliver_now
+  end
+
+  def update_confirmed_at_to_now
+    update confirmed_at: Time.now
+  end
+
+  aasm column: 'state' do
+    state :pending, initial: true
+    state :active
+
+    event :confirm, after: :update_confirmed_at_to_now do
+      transitions from: :pending, to: :active
+    end
   end
 end

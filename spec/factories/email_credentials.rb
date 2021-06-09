@@ -5,7 +5,6 @@ FactoryBot.define do
     email { FFaker::Internet.unique.email }
     password { FFaker::Internet.password }
     password_confirmation { password }
-    state { 'active' }
     confirmed_at { nil }
     user
 
