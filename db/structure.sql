@@ -35,7 +35,7 @@ CREATE TYPE public.email_credentials_states AS ENUM (
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -104,7 +104,8 @@ CREATE TABLE public.users (
     id bigint NOT NULL,
     deleted_at timestamp with time zone,
     created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    updated_at timestamp with time zone NOT NULL,
+    kind integer DEFAULT 0
 );
 
 
@@ -212,6 +213,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190426065925'),
 ('20190426065935'),
 ('20190502072717'),
-('20210605055256');
+('20210605055256'),
+('20211225071541');
 
 
