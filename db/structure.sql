@@ -35,7 +35,7 @@ CREATE TYPE public.email_credentials_states AS ENUM (
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -62,7 +62,9 @@ CREATE TABLE public.email_credentials (
     deleted_at timestamp with time zone,
     user_id bigint NOT NULL,
     created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    updated_at timestamp with time zone NOT NULL,
+    confirmation_token character varying,
+    confirmation_sent_at timestamp with time zone
 );
 
 
@@ -86,12 +88,74 @@ ALTER SEQUENCE public.email_credentials_id_seq OWNED BY public.email_credentials
 
 
 --
+-- Name: rooms; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.rooms (
+    id bigint NOT NULL,
+    title character varying,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: rooms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.rooms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: rooms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.rooms_id_seq OWNED BY public.rooms.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: subjects; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.subjects (
+    id bigint NOT NULL,
+    title character varying,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: subjects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.subjects_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: subjects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.subjects_id_seq OWNED BY public.subjects.id;
 
 
 --
@@ -102,7 +166,9 @@ CREATE TABLE public.users (
     id bigint NOT NULL,
     deleted_at timestamp with time zone,
     created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    updated_at timestamp with time zone NOT NULL,
+    kind integer DEFAULT 0,
+    name character varying
 );
 
 
@@ -133,6 +199,20 @@ ALTER TABLE ONLY public.email_credentials ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: rooms id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms ALTER COLUMN id SET DEFAULT nextval('public.rooms_id_seq'::regclass);
+
+
+--
+-- Name: subjects id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.subjects ALTER COLUMN id SET DEFAULT nextval('public.subjects_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -156,11 +236,27 @@ ALTER TABLE ONLY public.email_credentials
 
 
 --
+-- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms
+    ADD CONSTRAINT rooms_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: subjects subjects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.subjects
+    ADD CONSTRAINT subjects_pkey PRIMARY KEY (id);
 
 
 --
@@ -176,6 +272,13 @@ ALTER TABLE ONLY public.users
 --
 
 CREATE UNIQUE INDEX email_credentials_email_index ON public.email_credentials USING btree (email) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_email_credentials_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_email_credentials_on_confirmation_token ON public.email_credentials USING btree (confirmation_token);
 
 
 --
@@ -202,6 +305,11 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20190426065925'),
 ('20190426065935'),
-('20190502072717');
+('20190502072717'),
+('20210605055256'),
+('20211225071541'),
+('20211225073515'),
+('20211225073825'),
+('20211225074332');
 
 
